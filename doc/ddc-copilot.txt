@@ -1,0 +1,51 @@
+*ddc-copilot.txt*	copilot completion for ddc.vim
+
+Author: Shougo <Shougo.Matsu at gmail.com>
+License: MIT license
+
+CONTENTS					*ddc-copilot-contents*
+
+Introduction		|ddc-copilot-introduction|
+Install			|ddc-copilot-install|
+Examples		|ddc-copilot-examples|
+
+
+==============================================================================
+INTRODUCTION					*ddc-copilot-introduction*
+
+This source collects items from github Copilot.
+
+NOTE: It is experimental source.
+
+==============================================================================
+INSTALL						*ddc-copilot-install*
+
+Please install both "copilot.vim", "ddc.vim" and "denops.vim".
+
+https://github.com/github/copilot.vim
+https://github.com/Shougo/ddc.vim
+https://github.com/vim-denops/denops.vim
+
+
+==============================================================================
+EXAMPLES					*ddc-copilot-examples*
+>
+>
+	let g:copilot_enabled = v:false
+	let g:copilot_no_maps = v:true
+
+	" Use copilot source.
+	call ddc#custom#patch_global('sources', ['copilot'])
+	
+	" Change source options
+	call ddc#custom#patch_global('sourceOptions', {
+	\   'copilot': {
+	\     'matchers': [],
+	\     'mark': 'copilot',
+	\     'minAutoCompleteLength': 0,
+	\   }
+	\ })
+<
+
+==============================================================================
+vim:tw=78:ts=8:ft=help:norl:noet:fen:noet:
