@@ -1,4 +1,4 @@
-# ddc-copilot
+# ddc-source-copilot
 
 Copilot completion for ddc.vim
 

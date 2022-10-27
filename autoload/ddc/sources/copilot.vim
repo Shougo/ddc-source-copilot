@@ -3,6 +3,7 @@ function! ddc#sources#copilot#callback()
     return
   endif
 
+  echomsg 'callback'
   try
     call copilot#Complete(function('s:Handler'), function('s:Handler'))
   catch
@@ -16,7 +17,6 @@ function! s:Handler(result) abort
   endif
 
   let completions = get(a:result, 'completions', [])
-  "echomsg completions
   call ddc#update_items('copilot', map(copy(completions), { _, val -> {
         \     'word': val.displayText,
         \   }

@@ -1,24 +1,24 @@
-*ddc-copilot.txt*	copilot completion for ddc.vim
+*ddc-source-copilot.txt*	copilot completion for ddc.vim
 
 Author: Shougo <Shougo.Matsu at gmail.com>
 License: MIT license
 
-CONTENTS					*ddc-copilot-contents*
+CONTENTS					*ddc-source-copilot-contents*
 
-Introduction		|ddc-copilot-introduction|
-Install			|ddc-copilot-install|
-Examples		|ddc-copilot-examples|
+Introduction		|ddc-source-copilot-introduction|
+Install			|ddc-source-copilot-install|
+Examples		|ddc-source-copilot-examples|
 
 
 ==============================================================================
-INTRODUCTION					*ddc-copilot-introduction*
+INTRODUCTION				*ddc-source-copilot-introduction*
 
 This source collects items from github Copilot.
 
 NOTE: It is experimental source.
 
 ==============================================================================
-INSTALL						*ddc-copilot-install*
+INSTALL						*ddc-source-copilot-install*
 
 Please install both "copilot.vim", "ddc.vim" and "denops.vim".
 
@@ -28,7 +28,7 @@ https://github.com/vim-denops/denops.vim
 
 
 ==============================================================================
-EXAMPLES					*ddc-copilot-examples*
+EXAMPLES					*ddc-source-copilot-examples*
 >
 >
 	let g:copilot_enabled = v:false

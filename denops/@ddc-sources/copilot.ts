@@ -1,8 +1,8 @@
 import {
   BaseSource,
   Item,
-} from "https://deno.land/x/ddc_vim@v2.2.0/types.ts";
-import { GatherArguments, GetCompletePositionArguments } from "https://deno.land/x/ddc_vim@v2.2.0/base/source.ts";
+} from "https://deno.land/x/ddc_vim@v3.0.0/types.ts";
+import { GatherArguments, GetCompletePositionArguments } from "https://deno.land/x/ddc_vim@v3.0.0/base/source.ts";
 
 type Params = Record<never, never>;
 
