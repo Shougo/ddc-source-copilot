@@ -34,15 +34,13 @@ EXAMPLES					*ddc-source-copilot-examples*
 	let g:copilot_enabled = v:false
 	let g:copilot_no_maps = v:true
 
-	" Use copilot source.
 	call ddc#custom#patch_global('sources', ['copilot'])
 	
-	" Change source options
-	call ddc#custom#patch_global('sourceOptions', {
-	\   'copilot': {
-	\     'matchers': [],
-	\     'mark': 'copilot',
-	\     'minAutoCompleteLength': 0,
+	call ddc#custom#patch_global('sourceOptions', #{
+	\   copilot: #{
+	\     matchers: [],
+	\     mark: 'copilot',
+	\     minAutoCompleteLength: 0,
 	\   }
 	\ })
 <
