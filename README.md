@@ -4,7 +4,6 @@ Copilot completion for ddc.vim
 
 NOTE: It is experimental source.
 
-
 ## Required
 
 ### copilot.vim
