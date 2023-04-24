@@ -1,24 +1,21 @@
 function! ddc#sources#copilot#callback()
-  if !exists('*copilot#Complete')
+  if !('*copilot#Complete'->exists())
     return
   endif
 
-  echomsg 'callback'
   try
-    call copilot#Complete(function('s:Handler'), function('s:Handler'))
+    call copilot#Complete('s:Handler'->function(), 's:Handler'->function())
   catch
     call copilot#logger#Exception()
   endtry
 endfunction
 
 function! s:Handler(result) abort
-  if !exists('b:_copilot')
+  if !('b:_copilot'->exists())
     return
   endif
 
-  let completions = get(a:result, 'completions', [])
-  call ddc#update_items('copilot', map(copy(completions), { _, val -> {
-        \     'word': val.displayText,
-        \   }
-        \ }))
+  let completions = a:result->get('completions', [])
+  call ddc#update_items('copilot', completions->copy()->map(
+        \ { _, val -> #{ word: val.displayText, } }))
 endfunction
