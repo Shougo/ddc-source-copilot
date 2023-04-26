@@ -1,8 +1,4 @@
 function! ddc#sources#copilot#callback()
-  if !('*copilot#Complete'->exists())
-    return
-  endif
-
   try
     call copilot#Complete('s:Handler'->function(), 's:Handler'->function())
   catch

@@ -3,6 +3,7 @@ import {
   GatherArguments,
   GetCompletePositionArguments,
 } from "https://deno.land/x/ddc_vim@v3.4.0/base/source.ts";
+import { fn } from "https://deno.land/x/ddc_vim@v3.4.0/deps.ts";
 
 type Params = Record<never, never>;
 
@@ -16,7 +17,9 @@ export class Source extends BaseSource<Params> {
   }
 
   override async gather(args: GatherArguments<Params>): Promise<Item[]> {
-    await args.denops.call("ddc#sources#copilot#callback");
+    if (await fn.exists(args.denops, "*copilot#Complete")) {
+      await args.denops.call("ddc#sources#copilot#callback");
+    }
     return [];
   }
 
