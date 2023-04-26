@@ -15,7 +15,10 @@ INTRODUCTION				*ddc-source-copilot-introduction*
 
 This source collects items from github Copilot.
 
-NOTE: It is experimental source.
+NOTE: It is based on "ddc-copilot".
+
+https://github.com/yuki-yano/ddc-copilot
+
 
 ==============================================================================
 INSTALL						*ddc-source-copilot-install*
@@ -31,7 +34,6 @@ https://github.com/vim-denops/denops.vim
 EXAMPLES					*ddc-source-copilot-examples*
 >
 >
-	let g:copilot_enabled = v:false
 	let g:copilot_no_maps = v:true
 
 	call ddc#custom#patch_global('sources', ['copilot'])

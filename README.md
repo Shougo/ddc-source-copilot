@@ -2,7 +2,9 @@
 
 Copilot completion for ddc.vim
 
-NOTE: It is experimental source.
+NOTE: It is based on "ddc-copilot".
+
+https://github.com/yuki-yano/ddc-copilot
 
 ## Required
 
@@ -18,12 +20,9 @@ https://github.com/vim-denops/denops.vim
 
 https://github.com/Shougo/ddc.vim
 
-### getcmdcompltype() support
-
 ## Configuration
 
 ```vim
-let g:copilot_enabled = v:false
 let g:copilot_no_maps = v:true
 
 call ddc#custom#patch_global('sources', ['copilot'])
