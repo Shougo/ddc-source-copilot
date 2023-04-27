@@ -1,4 +1,3 @@
-import { buffers } from "https://deno.land/x/denops_std@v4.1.5/variable/mod.ts";
 import {
   BaseSource,
   GatherArguments,
@@ -23,16 +22,6 @@ type Suggestion = {
   uuid: string;
 };
 
-type Copilot = {
-  first?: {
-    status: string;
-  };
-  cycling?: {
-    status: string;
-  };
-  suggestions: Suggestion[];
-};
-
 type Params = Record<string, never>;
 
 export class Source extends BaseSource<Params> {
@@ -44,44 +33,28 @@ export class Source extends BaseSource<Params> {
     }
 
     const f = async () => {
-      let copilot:
-        | Copilot
-        | undefined = undefined;
-
-      const prevLine = await fn.getline(args.denops, ".");
-
       await batch(args.denops, async (denops: Denops) => {
         await denops.call("copilot#Suggest");
         await denops.call("copilot#Next");
         await denops.call("copilot#Previous");
       });
 
-      while (copilot?.suggestions == null) {
-        copilot = await buffers.get(args.denops, "_copilot") as
-          | Copilot
-          | undefined;
-
+      while (!(await fn.exists(args.denops, "b:_copilot.suggestions"))) {
         await delay(10);
       }
 
-      if (prevLine != await fn.getline(args.denops, ".")) {
-        // Input text is changed
-        copilot.suggestions = [];
-      }
+      const suggestions = await args.denops.call(
+        "eval",
+        "b:_copilot.suggestions",
+      ) as Suggestion[];
 
-      const items = copilot.suggestions.map(({ text }) => {
+      const items = suggestions.map(({ text }) => {
         const match = /^(?<indent>\s*).+/.exec(text);
         const indent = match?.groups?.indent;
 
-        let info: string;
-        if (indent != null) {
-          info = text
-            .split("\n")
-            .map((line) => line.slice(indent.length))
-            .join("\n");
-        } else {
-          info = text;
-        }
+        const info = indent != null
+          ? text.split("\n").map((line) => line.slice(indent.length)).join("\n")
+          : text;
 
         return {
           word: text.split("\n")[0].slice(args.completePos),
@@ -92,7 +65,7 @@ export class Source extends BaseSource<Params> {
         };
       });
 
-      args.denops.call("ddc#update_items", this.name, items);
+      await args.denops.call("ddc#update_items", this.name, items);
     };
 
     f();
