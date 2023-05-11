@@ -28,7 +28,7 @@ let g:copilot_no_maps = v:true
 call ddc#custom#patch_global('sources', ['copilot'])
 
 call ddc#custom#patch_global('sourceOptions', #{
-      \   input: #{
+      \   copilot: #{
       \     mark: 'copilot',
       \     matchers: [],
       \     minAutoCompleteLength: 0,

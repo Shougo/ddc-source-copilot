@@ -34,7 +34,6 @@ https://github.com/vim-denops/denops.vim
 ==============================================================================
 EXAMPLES					*ddc-source-copilot-examples*
 >
->
 	let g:copilot_no_maps = v:true
 
 	call ddc#custom#patch_global('sources', ['copilot'])

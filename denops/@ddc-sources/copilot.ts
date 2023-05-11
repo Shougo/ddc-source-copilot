@@ -5,7 +5,7 @@ import {
 } from "https://deno.land/x/ddc_vim@v3.4.0/base/source.ts";
 import { DdcGatherItems } from "https://deno.land/x/ddc_vim@v3.4.0/types.ts";
 import { batch, Denops, fn } from "https://deno.land/x/ddc_vim@v3.4.0/deps.ts";
-import { delay } from "https://deno.land/std@0.184.0/async/delay.ts";
+import { delay } from "https://deno.land/std@0.186.0/async/delay.ts";
 
 export type CompletionMetadata = {
   word: string;
@@ -90,7 +90,7 @@ export class Source extends BaseSource<Params> {
     }
 
     const lines = args.userData?.word.split("\n");
-    if (lines == null || lines[1] == null) {
+    if (lines === null || lines[1] === null) {
       return;
     }
 
