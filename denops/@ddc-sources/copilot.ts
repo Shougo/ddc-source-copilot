@@ -90,7 +90,7 @@ export class Source extends BaseSource<Params> {
     }
 
     const lines = args.userData?.word.split("\n");
-    if (lines === null || lines[1] === null) {
+    if (lines === undefined || lines[1] === undefined) {
       return;
     }
 
