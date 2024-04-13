@@ -18,7 +18,7 @@ type Suggestion = {
     start: { character: number; line: number };
     end: { character: number; line: number };
   };
-  text: string;
+  insertText: string;
   uuid: string;
 };
 
@@ -48,19 +48,20 @@ export class Source extends BaseSource<Params> {
         "b:_copilot.suggestions",
       ) as Suggestion[];
 
-      const items = suggestions.map(({ text }) => {
-        const match = /^(?<indent>\s*).+/.exec(text);
+      const items = suggestions.map(({ insertText }) => {
+        const match = /^(?<indent>\s*).+/.exec(insertText);
         const indent = match?.groups?.indent;
 
         const info = indent != null
-          ? text.split("\n").map((line) => line.slice(indent.length)).join("\n")
-          : text;
+          ? insertText.split("\n").map((line) => line.slice(indent.length))
+            .join("\n")
+          : insertText;
 
         return {
-          word: text.split("\n")[0].slice(args.completePos),
+          word: insertText.split("\n")[0].slice(args.completePos),
           info,
           user_data: {
-            word: text,
+            word: insertText,
           },
         };
       });
