@@ -1,11 +1,16 @@
 import {
   BaseSource,
-  GatherArguments,
-  OnCompleteDoneArguments,
-} from "https://deno.land/x/ddc_vim@v5.0.0/base/source.ts";
-import { DdcGatherItems } from "https://deno.land/x/ddc_vim@v5.0.0/types.ts";
-import { batch, Denops, fn } from "https://deno.land/x/ddc_vim@v5.0.0/deps.ts";
-import { delay } from "jsr:@std/async@0.224.0/delay";
+  type DdcGatherItems,
+} from "jsr:@shougo/ddc-vim@6.0.0/types";
+import {
+  type GatherArguments,
+  type OnCompleteDoneArguments,
+} from "jsr:@shougo/ddc-vim@6.0.0/source";
+
+import type { Denops } from "jsr:@denops/core@^7.0.0";
+import * as fn from "jsr:@denops/std@7.0.1/function";
+import { batch } from "jsr:@denops/std@7.0.1/batch";
+import { delay } from "jsr:@std/async@1.0.1/delay";
 
 export type CompletionMetadata = {
   word: string;
