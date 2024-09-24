@@ -28,7 +28,7 @@ type Suggestion = {
 type Params = Record<string, never>;
 
 export class Source extends BaseSource<Params> {
-  async gather(
+  override async gather(
     args: GatherArguments<Params>,
   ): Promise<DdcGatherItems> {
     if (!(await fn.exists(args.denops, "*copilot#Complete"))) {
@@ -80,11 +80,11 @@ export class Source extends BaseSource<Params> {
     });
   }
 
-  params() {
+  override params() {
     return {};
   }
 
-  async onCompleteDone(
+  override async onCompleteDone(
     args: OnCompleteDoneArguments<Params, CompletionMetadata>,
   ) {
     const firstLine = args.userData?.word.split("\n")[0];
