@@ -1,18 +1,19 @@
-import { type DdcGatherItems } from "jsr:@shougo/ddc-vim@~7.0.0/types";
+import { type DdcGatherItems } from "jsr:@shougo/ddc-vim@~7.1.0/types";
 import {
   BaseSource,
   type GatherArguments,
   type OnCompleteDoneArguments,
-} from "jsr:@shougo/ddc-vim@~7.0.0/source";
+  type OnInitArguments,
+} from "jsr:@shougo/ddc-vim@~7.1.0/source";
+import {
+  Unprintable,
+  type UnprintableUserData,
+} from "jsr:@milly/ddc-unprintable@~4.0.0";
 
 import type { Denops } from "jsr:@denops/core@~7.0.0";
-import * as fn from "jsr:@denops/std@~7.1.1/function";
-import { batch } from "jsr:@denops/std@~7.1.1/batch";
+import * as fn from "jsr:@denops/std@~7.3.0/function";
+import { batch } from "jsr:@denops/std@~7.3.0/batch";
 import { delay } from "jsr:@std/async@~1.0.4/delay";
-
-export type CompletionMetadata = {
-  word: string;
-};
 
 type Suggestion = {
   displayText: string;
@@ -26,8 +27,18 @@ type Suggestion = {
 };
 
 type Params = Record<string, never>;
+type UserData = Record<string, never> & UnprintableUserData;
 
 export class Source extends BaseSource<Params> {
+  #unprintable?: Unprintable<UserData>;
+
+  override onInit(_args: OnInitArguments<Params>) {
+    this.#unprintable = new Unprintable<UserData>({
+      highlightGroup: "SpecialKey",
+      callbackId: `source/${this.name}`,
+    });
+  }
+
   override async gather(
     args: GatherArguments<Params>,
   ): Promise<DdcGatherItems> {
@@ -61,15 +72,20 @@ export class Source extends BaseSource<Params> {
           : insertText;
 
         return {
-          word: insertText.split("\n")[0].slice(args.completePos),
+          word: insertText.slice(args.completePos),
           info,
-          user_data: {
-            word: insertText,
-          },
         };
       });
 
-      await args.denops.call("ddc#update_items", this.name, items);
+      await args.denops.call(
+        "ddc#update_items",
+        this.name,
+        await this.#unprintable!.convertItems(
+          args.denops,
+          items,
+          args.context.nextInput,
+        ),
+      );
     };
 
     f();
@@ -84,28 +100,9 @@ export class Source extends BaseSource<Params> {
     return {};
   }
 
-  override async onCompleteDone(
-    args: OnCompleteDoneArguments<Params, CompletionMetadata>,
-  ) {
-    const firstLine = args.userData?.word.split("\n")[0];
-    const currentLine = await fn.getline(args.denops, ".");
-    if (currentLine !== firstLine) {
-      return;
-    }
-
-    const lines = args.userData?.word.split("\n");
-    if (lines === undefined || lines[1] === undefined) {
-      return;
-    }
-
-    const lnum = await fn.line(args.denops, ".");
-    const appendLines = lines.slice(1);
-    await fn.append(args.denops, lnum, appendLines);
-    await fn.setpos(args.denops, ".", [
-      0,
-      lnum + appendLines.length,
-      appendLines.slice(-1)[0].length + 1,
-      0,
-    ]);
+  override onCompleteDone(
+    args: OnCompleteDoneArguments<Params, UserData>,
+  ): Promise<void> {
+    return this.#unprintable!.onCompleteDone(args);
   }
 }
