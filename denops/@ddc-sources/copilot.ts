@@ -60,11 +60,11 @@ export class Source extends BaseSource<Params> {
         if (!await fn.exists(args.denops, "*copilot#Complete")) {
           return [];
         }
-        this.#updateItems(args);
+        this.#tellToVim(args);
         break;
       }
       case "lua": {
-        this.#updateItems2(args);
+        this.#tellToLua(args);
         break;
       }
       default: {
@@ -92,7 +92,7 @@ export class Source extends BaseSource<Params> {
     return this.#unprintable!.onCompleteDone(args);
   }
 
-  async #updateItems(
+  async #tellToVim(
     args: GatherArguments<Params>,
   ): Promise<void> {
     await batch(args.denops, async (denops: Denops) => {
@@ -110,6 +110,30 @@ export class Source extends BaseSource<Params> {
       "b:_copilot.suggestions",
     ) as Suggestion[];
 
+    await this.#updateItems(args, suggestions);
+  }
+
+  async #tellToLua(
+    args: GatherArguments<Params>,
+  ): Promise<void> {
+    const id = register(args.denops, async (suggestions) => {
+      assert(suggestions, is.ArrayOf(is.ObjectOf({ text: is.String })));
+      await this.#updateItems(
+        args,
+        suggestions.map(({ text: insertText }) => ({ insertText })),
+      );
+    });
+    await args.denops.call(
+      "luaeval",
+      "require('ddc.source.copilot').update_items(_A[1], _A[2])",
+      [args.denops.name, id],
+    );
+  }
+
+  async #updateItems(
+    args: GatherArguments<Params>,
+    suggestions: Pick<Suggestion, "insertText">[],
+  ): Promise<void> {
     const items = suggestions.map(({ insertText }) => {
       const match = /^(?<indent>\s*).+/.exec(insertText);
       const indent = match?.groups?.indent;
@@ -133,45 +157,6 @@ export class Source extends BaseSource<Params> {
         items,
         args.context.nextInput,
       ),
-    );
-  }
-
-  async #updateItems2(
-    args: GatherArguments<Params>,
-  ): Promise<void> {
-    const id = register(args.denops, async (suggestions) => {
-      assert(suggestions, is.ArrayOf(is.ObjectOf({ text: is.String })));
-      const items = suggestions.map(
-        ({ text: insertText }) => {
-          const match = /^(?<indent>\s*).+/.exec(insertText);
-          const indent = match?.groups?.indent;
-
-          const info = indent != null
-            ? insertText.split("\n").map((line) => line.slice(indent.length))
-              .join("\n")
-            : insertText;
-
-          return {
-            word: insertText.slice(args.completePos),
-            info,
-          };
-        },
-      );
-
-      await args.denops.call(
-        "ddc#update_items",
-        this.name,
-        await this.#unprintable!.convertItems(
-          args.denops,
-          items,
-          args.context.nextInput,
-        ),
-      );
-    });
-    await args.denops.call(
-      "luaeval",
-      "require('ddc.source.copilot').update_items(_A[1], _A[2])",
-      [args.denops.name, id],
     );
   }
 }
