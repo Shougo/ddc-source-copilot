@@ -9,10 +9,12 @@ import {
   Unprintable,
   type UnprintableUserData,
 } from "jsr:@milly/ddc-unprintable@~4.0.0";
+import { assert, is } from "jsr:@core/unknownutil@~4.3.0";
 
 import type { Denops } from "jsr:@denops/core@~7.0.0";
 import * as fn from "jsr:@denops/std@~7.5.0/function";
 import { batch } from "jsr:@denops/std@~7.5.0/batch";
+import { register } from "jsr:@denops/std@~7.5.0/lambda";
 import { delay } from "jsr:@std/async@~1.0.4/delay";
 
 type Suggestion = {
@@ -62,10 +64,7 @@ export class Source extends BaseSource<Params> {
         break;
       }
       case "lua": {
-        args.denops.call(
-          "luaeval",
-          `require('ddc.source.copilot').update_items("${this.name}", ${args.completePos})`,
-        );
+        this.#updateItems2(args);
         break;
       }
       default: {
@@ -134,6 +133,45 @@ export class Source extends BaseSource<Params> {
         items,
         args.context.nextInput,
       ),
+    );
+  }
+
+  async #updateItems2(
+    args: GatherArguments<Params>,
+  ): Promise<void> {
+    const id = register(args.denops, async (suggestions) => {
+      assert(suggestions, is.ArrayOf(is.ObjectOf({ text: is.String })));
+      const items = suggestions.map(
+        ({ text: insertText }) => {
+          const match = /^(?<indent>\s*).+/.exec(insertText);
+          const indent = match?.groups?.indent;
+
+          const info = indent != null
+            ? insertText.split("\n").map((line) => line.slice(indent.length))
+              .join("\n")
+            : insertText;
+
+          return {
+            word: insertText.slice(args.completePos),
+            info,
+          };
+        },
+      );
+
+      await args.denops.call(
+        "ddc#update_items",
+        this.name,
+        await this.#unprintable!.convertItems(
+          args.denops,
+          items,
+          args.context.nextInput,
+        ),
+      );
+    });
+    await args.denops.call(
+      "luaeval",
+      "require('ddc.source.copilot').update_items(_A[1], _A[2])",
+      [args.denops.name, id],
     );
   }
 }
