@@ -1,29 +1,8 @@
 local api = require("copilot.api")
 local util = require("copilot.util")
+local client = require("copilot.client")
 
 local M = {}
-
---- Get Copilit client
---- @return lsp.Client | nil
-local function get_client()
-  for _, client in ipairs(vim.lsp.get_clients({ name = "copilot" })) do
-    if client.name == "copilot" then
-      return client
-    end
-  end
-  return nil
-end
-
---- Split by line
---- @param str string
---- @return string[]
-local function split_line(str)
-  local result = {}
-  for line in string.gmatch(str, "[^\r\n]+") do
-    table.insert(result, line)
-  end
-  return result
-end
 
 --- @class Suggestion
 --- @field displayText string
@@ -50,12 +29,12 @@ local function format(complete_pos)
         and vim.tbl_map(function(line)
             return string.sub(line, string.len(indent) + 1)
           end,
-          split_line(item.text)
+          vim.split(item.text, "\r?\n")
         )
         or item.text
 
     return {
-      word = string.sub(split_line(item.text)[1], complete_pos + 1),
+      word = string.sub(vim.split(item.text, "\r?\n")[1], complete_pos + 1),
       info = info,
       user_data = {
         word = item.text,
@@ -68,11 +47,11 @@ end
 --- @param name string
 --- @param complete_pos number
 M.update_items = function(name, complete_pos)
-  local client = get_client()
-  if client == nil then
+  local c = client.get()
+  if c == nil then
     return
   end
-  api.get_completions(client, util.get_doc_params(), function(err, response)
+  api.get_completions(c, util.get_doc_params(), function(err, response)
     if err or not response or not response.completions then
       return
     end
