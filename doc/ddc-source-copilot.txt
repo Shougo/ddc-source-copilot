@@ -3,7 +3,7 @@
 Author: Shougo <Shougo.Matsu at gmail.com>
 License: MIT license
 
-CONTENTS					*ddc-source-copilot-contents*
+CONTENTS                                         *ddc-source-copilot-contents*
 
 Introduction		|ddc-source-copilot-introduction|
 Install			|ddc-source-copilot-install|
@@ -12,7 +12,7 @@ FAQ			|ddc-source-copilot-faq|
 
 
 ==============================================================================
-INTRODUCTION				*ddc-source-copilot-introduction*
+INTRODUCTION                                 *ddc-source-copilot-introduction*
 
 This source collects items from github Copilot.
 
@@ -22,7 +22,7 @@ https://github.com/yuki-yano/ddc-copilot
 
 
 ==============================================================================
-INSTALL						*ddc-source-copilot-install*
+INSTALL                                           *ddc-source-copilot-install*
 
 Please install both "copilot.vim", "ddc.vim" and "denops.vim".
 
@@ -32,8 +32,8 @@ https://github.com/vim-denops/denops.vim
 
 
 ==============================================================================
-EXAMPLES					*ddc-source-copilot-examples*
->
+EXAMPLES                                         *ddc-source-copilot-examples*
+>vim
 	let g:copilot_no_maps = v:true
 
 	call ddc#custom#patch_global('sources', ['copilot'])
@@ -48,7 +48,7 @@ EXAMPLES					*ddc-source-copilot-examples*
 <
 
 ==============================================================================
-FAQ						*ddc-source-copilot-faq*
+FAQ                                                   *ddc-source-copilot-faq*
 
 Q: The items is not updated or generated.
 

@@ -1,26 +1,35 @@
-import { type DdcGatherItems } from "jsr:@shougo/ddc-vim@~9.1.0/types";
+import { type DdcGatherItems } from "jsr:@shougo/ddc-vim@~9.4.0/types";
 import {
   BaseSource,
   type GatherArguments,
   type OnCompleteDoneArguments,
   type OnInitArguments,
-} from "jsr:@shougo/ddc-vim@~9.1.0/source";
+} from "jsr:@shougo/ddc-vim@~9.4.0/source";
 import {
   Unprintable,
   type UnprintableUserData,
 } from "jsr:@milly/ddc-unprintable@~4.0.0";
 
 import type { Denops } from "jsr:@denops/core@~7.0.0";
-import * as fn from "jsr:@denops/std@~7.4.0/function";
-import { batch } from "jsr:@denops/std@~7.4.0/batch";
+import * as fn from "jsr:@denops/std@~7.5.0/function";
+import { batch } from "jsr:@denops/std@~7.5.0/batch";
 import { delay } from "jsr:@std/async@~1.0.4/delay";
 
 type Suggestion = {
   displayText: string;
-  position: { character: number; line: number };
+  position: {
+    character: number;
+    line: number;
+  };
   range: {
-    start: { character: number; line: number };
-    end: { character: number; line: number };
+    start: {
+      character: number;
+      line: number;
+    };
+    end: {
+      character: number;
+      line: number;
+    };
   };
   insertText: string;
   uuid: string;
@@ -42,7 +51,7 @@ export class Source extends BaseSource<Params> {
   override async gather(
     args: GatherArguments<Params>,
   ): Promise<DdcGatherItems> {
-    if (!(await fn.exists(args.denops, "*copilot#Complete"))) {
+    if (!await fn.exists(args.denops, "*copilot#Complete")) {
       return [];
     }
 
@@ -53,7 +62,7 @@ export class Source extends BaseSource<Params> {
         await denops.call("copilot#Previous");
       });
 
-      while (!(await fn.exists(args.denops, "b:_copilot.suggestions"))) {
+      while (!await fn.exists(args.denops, "b:_copilot.suggestions")) {
         await delay(10);
       }
 
