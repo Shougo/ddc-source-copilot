@@ -8,9 +8,11 @@ https://github.com/yuki-yano/ddc-copilot
 
 ## Required
 
-### copilot.vim
+### copilot.vim or copilot.lua
 
 https://github.com/github/copilot.vim
+
+https://github.com/zbirenbaum/copilot.lua
 
 ### denops.vim
 
@@ -32,6 +34,11 @@ call ddc#custom#patch_global('sourceOptions', #{
       \     mark: 'copilot',
       \     matchers: [],
       \     minAutoCompleteLength: 0,
+      \   }
+      \ })
+call ddc#custom#patch_global('sourceParams', #{
+      \   copilot: #{
+      \     copilot: 'vim',
       \   }
       \ })
 ```
