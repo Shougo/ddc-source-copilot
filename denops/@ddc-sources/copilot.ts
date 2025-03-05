@@ -60,10 +60,15 @@ export class Source extends BaseSource<Params> {
         if (!await fn.exists(args.denops, "*copilot#Complete")) {
           return [];
         }
+
         this.#tellToVim(args);
         break;
       }
       case "lua": {
+        if (args.denops.meta.host !== "nvim") {
+          return [];
+        }
+
         this.#tellToLua(args);
         break;
       }
@@ -116,13 +121,15 @@ export class Source extends BaseSource<Params> {
   async #tellToLua(
     args: GatherArguments<Params>,
   ): Promise<void> {
-    const id = register(args.denops, async (suggestions) => {
+    const id = register(args.denops, async (suggestions: unknown) => {
       assert(suggestions, is.ArrayOf(is.ObjectOf({ text: is.String })));
+
       await this.#updateItems(
         args,
         suggestions.map(({ text: insertText }) => ({ insertText })),
       );
     });
+
     await args.denops.call(
       "luaeval",
       "require('ddc.source.copilot').update_items(_A[1], _A[2])",

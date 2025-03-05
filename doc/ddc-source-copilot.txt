@@ -37,10 +37,12 @@ https://github.com/vim-denops/denops.vim
 PARAMS                                             *ddc-source-copilot-params*
 
                                             *ddc-source-copilot-param-copilot*
-copilot		('vim'|'lua')
+copilot		("vim"|"lua")
 		Types of Copilot integration to use.
+		"vim": Use copilot.vim
+		"lua": Use copilot.lua(Nvim only)
 
-		Default: 'vim'
+		Default: "vim"
 
 ==============================================================================
 EXAMPLES                                         *ddc-source-copilot-examples*
