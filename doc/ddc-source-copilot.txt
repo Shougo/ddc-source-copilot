@@ -24,12 +24,23 @@ https://github.com/yuki-yano/ddc-copilot
 ==============================================================================
 INSTALL                                           *ddc-source-copilot-install*
 
-Please install both "copilot.vim", "ddc.vim" and "denops.vim".
+Please install both "copilot.vim" (or "copilot.lua"), "ddc.vim" and
+"denops.vim".
 
 https://github.com/github/copilot.vim
+https://github.com/zbirenbaum/copilot.lua
 https://github.com/Shougo/ddc.vim
 https://github.com/vim-denops/denops.vim
 
+
+==============================================================================
+PARAMS                                             *ddc-source-copilot-params*
+
+                                            *ddc-source-copilot-param-copilot*
+copilot		('vim'|'lua')
+		Types of Copilot integration to use.
+
+		Default: 'vim'
 
 ==============================================================================
 EXAMPLES                                         *ddc-source-copilot-examples*
@@ -43,6 +54,11 @@ EXAMPLES                                         *ddc-source-copilot-examples*
 	\     matchers: [],
 	\     mark: 'copilot',
 	\     minAutoCompleteLength: 0,
+	\   }
+	\ })
+	call ddc#custom#patch_global('sourceParams', #{
+	\   copilot: #{
+	\     copilot: 'vim',
 	\   }
 	\ })
 <
