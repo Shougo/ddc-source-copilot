@@ -8,7 +8,7 @@ import {
 import {
   Unprintable,
   type UnprintableUserData,
-} from "jsr:@milly/ddc-unprintable@~4.0.0";
+} from "jsr:@milly/ddc-unprintable@~5.0.0";
 import { assert, is } from "jsr:@core/unknownutil@~4.3.0";
 
 import type { Denops } from "jsr:@denops/core@~7.0.0";
