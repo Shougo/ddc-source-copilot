@@ -1,21 +1,18 @@
-import { type DdcGatherItems } from "jsr:@shougo/ddc-vim@~9.4.0/types";
+import type { DdcGatherItems } from "@shougo/ddc-vim/types";
 import {
   BaseSource,
   type GatherArguments,
   type OnCompleteDoneArguments,
   type OnInitArguments,
-} from "jsr:@shougo/ddc-vim@~9.4.0/source";
-import {
-  Unprintable,
-  type UnprintableUserData,
-} from "jsr:@milly/ddc-unprintable@~5.0.0";
-import { assert, is } from "jsr:@core/unknownutil@~4.3.0";
+} from "@shougo/ddc-vim/source";
+import { Unprintable, type UnprintableUserData } from "@milly/ddc-unprintable";
+import { assert, is } from "@core/unknownutil";
 
-import type { Denops } from "jsr:@denops/core@~7.0.0";
-import * as fn from "jsr:@denops/std@~7.5.0/function";
-import { batch } from "jsr:@denops/std@~7.5.0/batch";
-import { register } from "jsr:@denops/std@~7.5.0/lambda";
-import { delay } from "jsr:@std/async@~1.0.4/delay";
+import type { Denops } from "@denops/std";
+import * as fn from "@denops/std/function";
+import { batch } from "@denops/std/batch";
+import { register } from "@denops/std/lambda";
+import { delay } from "@std/async/delay";
 
 type Suggestion = {
   displayText: string;
